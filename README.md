@@ -10,28 +10,51 @@ HAC Developer Experience will deliver the UI for App Studio.
 
 1. ```yarn install```
 
-2. Start webpack - ```yarn dev```
+    For this step, I enjoyed the ```brew install yarn``` and then I got the '1.22.22' yarn installed and worked.
+    When i tried the ```yarn install --verbose```, i can see there was a hang.
+    After I removed ```.config/.../yarn.lock```, things were resolved.
 
-3. Open the URL listed in the terminal output.
+2. Start webpack - ```ENVIRONMENT=prod yarn dev```
 
+    You will get the output like:
 
-### Run with local HAC Core
+    ```log
+    <i> [webpack-dev-server] Project is running at:
+    <i> [webpack-dev-server] Loopback: https://localhost:1337/
+    <i> [webpack-dev-server] On Your Network (IPv4): https://192.168.1.2:1337/
+    <i> [webpack-dev-server] On Your Network (IPv6): https://[fe80::1]:1337/
+    <i> [webpack-dev-server] Content not from webpack is served from '/Users/carawang/hac-dev/dist' directory
+    <i> [webpack-dev-server] 404s will fallback to '/index.html'
+    App should run on:
 
-1. Start HAC Core locally - ```LOCAL_HAC_DEV=true ENVIRONMENT=prod yarn dev```
-2. Start HAC Dev with module federation - ```yarn federated```
+    - https://prod.foo.redhat.com:1337/application-pipeline
 
+    Static assets are available at:
 
-### Update `/etc/hosts`
+    - https://prod.foo.redhat.com:1337/api/plugins/hac-dev/
+    ```
 
-To use webpack proxy you need to append this to your `/etc/hosts` for auth:
+3. Update `/etc/hosts` to make sure the prod.foo.redhat.com points to 127.0.0.1
 
-```
-127.0.0.1 prod.foo.redhat.com
-127.0.0.1 stage.foo.redhat.com
-127.0.0.1 qa.foo.redhat.com
-127.0.0.1 ci.foo.redhat.com
+    You need to append this to your `/etc/hosts` for auth:
 
-```
+    ```bash
+    127.0.0.1 prod.foo.redhat.com
+    127.0.0.1 stage.foo.redhat.com
+    127.0.0.1 qa.foo.redhat.com
+    127.0.0.1 ci.foo.redhat.com
+    ```
+
+    Then refresh your network:
+
+    ```bash
+    sudo dscacheutil -flushcache
+    sudo killall -HUP mDNSResponder
+    ```
+
+    And ping the ```prod.foo.redhat.com``` to make sure it points to ```127.0.0.1```.
+    Finally, open your browser and visit the ```https://prod.foo.redhat.com:1337/application-pipeline```.
+    ![Alt text](./cara_icons/prod_home.png "a title")
 
 ### Testing
 
